@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PDF Generator</title>
+  </head>
+  <body>
+    <h1>Tabbed PDF Generator</h1>
+    <form
+      action="/generate_pdf"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <label for="margin_left">Left Margin (inches):</label>
+      <input
+        type="text"
+        name="margin_left"
+        value="0.5"
+      /><br /><br />
+      <label for="margin_right">Right Margin (inches):</label>
+      <input
+        type="text"
+        name="margin_right"
+        value="0.5"
+      /><br /><br />
+      <label for="num_columns">Number of Columns:</label>
+      <input
+        type="text"
+        name="num_columns"
+        value="3"
+      /><br /><br />
+      <label for="text_file">Text File:</label>
+      <input
+        type="file"
+        name="text_file"
+        required
+      /><br /><br />
+      <button type="submit">Generate PDF</button>
+    </form>
+  </body>
+</html>
