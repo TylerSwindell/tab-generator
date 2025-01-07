@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, send_file
 import os
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import landscape
 
 app = Flask(__name__)
 
@@ -62,4 +61,5 @@ def create_tabbed_pdf(
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
