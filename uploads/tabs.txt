@@ -1,11 +1,2 @@
-Tab1
-Tab2
-Tab3
-Tab4
-Tab5
-Tab6
-Tab7
-Tab8
-Tab9
-Tab10
-This is one extra tab that is way too long and I want to see if it bleeds off or what the affect is.
+Level 1 – Beginner Training
+Level 2 – Advanced Training

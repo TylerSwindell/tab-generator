@@ -43,6 +43,10 @@ def create_tabbed_pdf(
     with open(txt_file_path, "r") as file:
         lines = [line.strip() for line in file if line.strip()]
 
+    # Add blank tabs if the number of lines is less than the number of columns
+    while len(lines) % num_columns != 0:
+        lines.append("")  # Add blank tab
+
     c = canvas.Canvas(output_path, pagesize=(page_width, page_height))
 
     column_counter = 0
