@@ -50,7 +50,6 @@ def generate_pdf():
     num_columns = int(request.form.get("num_columns", 5))
     fill_blanks = bool(request.form.get("fill_blanks"))
 
-    print(fill_blanks)
     # Save uploaded file
     file = request.files["text_file"]
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -117,7 +116,14 @@ def create_tabbed_pdf(margin_left, margin_right, num_columns, lines, output_path
     page_width = 11 * 72
     page_height = 9 * 72
     tab_height = 0.5 * 72
-    max_text_height = 0.45 * 72  # Maximum height for text in the tab section
+    imageable_height = (
+        0.34 * 72
+    )  # Imageable area height starting at the bottom of the tab
+    bottom_margin = 0.08 * 72  # Bottom margin in points
+    top_margin = (
+        tab_height - imageable_height - bottom_margin
+    )  # Calculate the top margin
+    usable_text_height = imageable_height - bottom_margin  # Usable text height
     usable_width = page_width - margin_left - margin_right
     column_width = usable_width / num_columns
 
@@ -128,7 +134,7 @@ def create_tabbed_pdf(margin_left, margin_right, num_columns, lines, output_path
 
     for line in lines:
         column_x = margin_left + (column_counter % num_columns) * column_width
-        column_y = page_height - tab_height / 2
+        column_y = page_height - tab_height + bottom_margin
 
         font_size = 12  # Start with a default font size
         text_fits = False
@@ -140,10 +146,10 @@ def create_tabbed_pdf(margin_left, margin_right, num_columns, lines, output_path
                 line, "Helvetica", font_size, column_width - 10
             )  # 10 pts padding
 
-            # Check if all lines fit within the maximum text height
+            # Check if all lines fit within the usable text height
             if (
-                len(wrapped_text) * font_size <= max_text_height
-            ):  # Ensure text stays within bounds
+                len(wrapped_text) * font_size <= usable_text_height
+            ):  # Ensure text stays within bounds with margins
                 text_fits = True
                 break
 
@@ -152,8 +158,10 @@ def create_tabbed_pdf(margin_left, margin_right, num_columns, lines, output_path
         if not text_fits:
             return False  # Text does not fit, cancel PDF creation
 
-        # Draw the text in the center of the column
-        start_y = column_y + max_text_height / 2 - (len(wrapped_text) * font_size) / 2
+        # Draw the text in the center of the column within the usable area
+        start_y = (
+            column_y + usable_text_height / 2 - (len(wrapped_text) * font_size) / 2
+        )
         for i, text in enumerate(wrapped_text):
             c.drawCentredString(
                 column_x + column_width / 2, start_y - i * font_size, text
